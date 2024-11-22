@@ -1,4 +1,4 @@
-import { ICatalogRepository } from '../../interfaces/catalogRepository.inteface';
+import { ICatalogRepository } from '../../interfaces/catalogRepository.interface';
 import { Product } from '../../models/product.model';
 import { MockCatalogRepository } from '../../repository/mockCatalog.repository';
 import { ProductFactory } from '../../utils/fixtures';

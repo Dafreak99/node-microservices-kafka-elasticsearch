@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { CreateProductRequest, UpdateProductRequest } from '../dto/product.dto';
 import { CatalogRepository } from '../repository/catalog.repository';
 import { CatalogService } from '../services/catalog.service';
@@ -71,15 +71,14 @@ router.get('/products', async (req: Request, res: Response): Promise<any> => {
 
 router.get(
   '/product/:id',
-  async (req: Request, res: Response): Promise<any> => {
+  async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const { id } = req.params;
 
     try {
       const data = await catalogService.getProduct(Number(id));
       return res.status(200).json(data);
     } catch (error: any) {
-      const err = error as Error;
-      return res.status(500).json(err.message);
+      return next(error);
     }
   },
 );

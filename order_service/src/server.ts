@@ -1,7 +1,7 @@
 import app from './expressApp';
 import { logger } from './utils';
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.APP_PORT || 9000;
 
 export const StartServer = async () => {
   app.listen(PORT, () => {

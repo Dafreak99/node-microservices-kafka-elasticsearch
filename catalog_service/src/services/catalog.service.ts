@@ -1,4 +1,4 @@
-import { ICatalogRepository } from '../interfaces/catalogRepository.inteface';
+import { ICatalogRepository } from '../interfaces/catalogRepository.interface';
 
 export class CatalogService {
   private repository: ICatalogRepository;
