@@ -1,6 +1,6 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Product } from '@prisma/client';
 import { ICatalogRepository } from '../interfaces/catalogRepository.interface';
-import { Product } from '../models/product.model';
+// import { Product } from '../models/product.model';
 import { NotFoundError } from '../utils';
 
 export class CatalogRepository implements ICatalogRepository {
