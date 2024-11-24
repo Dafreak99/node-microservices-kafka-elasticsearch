@@ -1,6 +1,5 @@
 import { PrismaClient, Product } from '@prisma/client';
 import { ICatalogRepository } from '../interfaces/catalogRepository.interface';
-// import { Product } from '../models/product.model';
 import { NotFoundError } from '../utils';
 
 export class CatalogRepository implements ICatalogRepository {
@@ -42,5 +41,14 @@ export class CatalogRepository implements ICatalogRepository {
     }
 
     return Promise.resolve(product);
+  }
+  async findStock(ids: number[]): Promise<Product[]> {
+    return await this.prisma.product.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
   }
 }

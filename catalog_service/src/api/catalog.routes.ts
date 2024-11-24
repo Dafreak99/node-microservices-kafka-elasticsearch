@@ -28,7 +28,7 @@ router.post('/product', async (req: Request, res: Response): Promise<any> => {
 });
 
 router.patch(
-  '/products/:id',
+  '/product/:id',
   async (req: Request, res: Response): Promise<any> => {
     try {
       const { errors, input } = await RequestValidator(
@@ -54,7 +54,7 @@ router.patch(
   },
 );
 
-router.get('/products', async (req: Request, res: Response): Promise<any> => {
+router.get('/product', async (req: Request, res: Response): Promise<any> => {
   const { limit, offset } = req.query;
 
   try {
@@ -90,6 +90,19 @@ router.delete(
 
     try {
       const data = await catalogService.deleteProduct(Number(id));
+      return res.status(200).json(data);
+    } catch (error: any) {
+      const err = error as Error;
+      return res.status(500).json(err.message);
+    }
+  },
+);
+
+router.post(
+  '/product/stock',
+  async (req: Request, res: Response): Promise<any> => {
+    try {
+      const data = await catalogService.getProductStock(req.body.ids);
       return res.status(200).json(data);
     } catch (error: any) {
       const err = error as Error;

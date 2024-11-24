@@ -42,4 +42,14 @@ export class CatalogService {
     const deletedId = await this.repository.delete(id);
     return deletedId;
   }
+
+  async getProductStock(ids: number[]) {
+    const products = await this.repository.findStock(ids);
+
+    if (!products) {
+      throw new Error('Unable to find the product stock details');
+    }
+
+    return products;
+  }
 }
