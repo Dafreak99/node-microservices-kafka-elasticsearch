@@ -50,7 +50,7 @@ export const GetCart = async (id: number, repo: CartRepositoryType) => {
 
   /**
    * verify with inventory service if the product is still available
-   * cart item can be added long time ago so the quantity of its can be outdated (out of stock)
+   * cart item can be added long time ago so the quantity of it can be outdated (out of stock)
    */
   const stockDetails = await GetStockDetails(
     lineItems.map((item) => item.productId),

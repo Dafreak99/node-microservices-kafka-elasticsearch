@@ -9,7 +9,7 @@ const router = express.Router();
 const repo = CartRepository;
 
 router.post(
-  '/cart',
+  '/carts',
   RequestAuthorizer,
   async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     try {
@@ -44,7 +44,7 @@ router.post(
 );
 
 router.get(
-  '/cart',
+  '/carts',
   RequestAuthorizer,
   async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     try {
@@ -65,7 +65,7 @@ router.get(
 );
 
 router.patch(
-  '/cart/:lineItemId',
+  '/carts/:lineItemId',
   RequestAuthorizer,
   async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     try {
@@ -95,7 +95,7 @@ router.patch(
 );
 
 router.delete(
-  '/cart/:lineItemId',
+  '/carts/:lineItemId',
   RequestAuthorizer,
   async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     try {

@@ -22,4 +22,7 @@ export class MockCatalogRepository implements ICatalogRepository {
   findOne(id: number): Promise<Product> {
     return Promise.resolve({ id } as Product);
   }
+  findStock(ids: number[]): Promise<Product[]> {
+    throw new Error('Method not implemented.');
+  }
 }

@@ -1,49 +1,108 @@
-import express, { Request, Response } from 'express';
-import { MessageBroker } from '../utils/broker';
-import { OrderEvent } from '../types';
+import express, { NextFunction, Request, Response } from 'express';
+import { RequestAuthorizer } from './middleware';
+import * as service from '../services/order.service';
+import { OrderRepository } from '../repository/order.repository';
+import { CartRepository } from '../repository/cart.repository';
 
 const router = express.Router();
+const repo = OrderRepository;
+const cartRepo = CartRepository;
 
-router.post('/order', async (req: Request, res: Response): Promise<any> => {
-  // order create logic
+router.post(
+  '/orders',
+  RequestAuthorizer,
+  async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    try {
+      const { user } = req;
 
-  // 3rd step: publish the message
-  await MessageBroker.publish({
-    headers: { token: req.headers.authorization },
-    topic: 'OrderEvents',
-    event: OrderEvent.CREATED_ORDER,
-    message: {
-      orderId: 1,
-      item: [
-        {
-          productId: 1,
-          quantity: 1,
-        },
-        {
-          productId: 2,
-          quantity: 2,
-        },
-      ],
-    },
-  });
+      if (!user) {
+        next(new Error('User not found'));
+        return;
+      }
 
-  return res.status(200).json({ message: 'order created' });
-});
+      const response = await service.CreateOrder(user.id, repo, cartRepo);
+      return res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
-router.get('/order', async (req: Request, res: Response): Promise<any> => {
-  return res.status(200).json({ message: 'get order' });
-});
+router.get(
+  '/orders',
+  async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    try {
+      const { user } = req;
 
-router.get('/order/:id', async (req: Request, res: Response): Promise<any> => {
-  return res.status(200).json({ message: 'get order' });
-});
+      if (!user) {
+        next(new Error('User not found'));
+        return;
+      }
 
-router.patch('/order', async (req: Request, res: Response): Promise<any> => {
-  return res.status(200).json({ message: 'get order' });
-});
+      const response = await service.GetOrders(user.id, repo);
+      return res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+    return res.status(200).json({ message: 'get order' });
+  },
+);
 
-router.delete('/order', async (req: Request, res: Response): Promise<any> => {
-  return res.status(200).json({ message: 'get order' });
-});
+router.get(
+  '/orders/:id',
+  async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    try {
+      const { user } = req;
+      const orderId = parseInt(req.params.id);
+
+      if (!user) {
+        next(new Error('User not found'));
+        return;
+      }
+
+      const response = await service.GetOrder(orderId, repo);
+      return res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// only going to call from microservice
+router.patch(
+  '/orders/:id',
+  async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    try {
+      // security check for microservice calls only
+      const { status } = req.body;
+      const orderId = parseInt(req.params.id);
+      const response = await service.UpdateOrder(orderId, status, repo);
+      return res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// only going to call from microservice
+router.delete(
+  '/orders/:id',
+  async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    try {
+      const { user } = req;
+      const orderId = parseInt(req.params.id);
+
+      if (!user) {
+        next(new Error('User not found'));
+        return;
+      }
+
+      const response = await service.DeleteOrder(orderId, repo);
+      return res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 export default router;

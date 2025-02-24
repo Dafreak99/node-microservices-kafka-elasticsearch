@@ -1,6 +1,6 @@
 import express from 'express';
 import catalogRouter from './api/catalog.routes';
-import { HandleErrorWithLogger, httpLogger, logger } from './utils';
+import { HandleErrorWithLogger, httpLogger } from './utils';
 
 const app = express();
 

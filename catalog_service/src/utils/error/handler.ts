@@ -12,8 +12,6 @@ export const HandleErrorWithLogger = (
   let status = 500;
   let data = error.message;
 
-  console.log('error here', error);
-
   // skip common / known errors
   [NotFoundError, ValidationError, AuthorizeError].forEach((typeOfError) => {
     if (error instanceof typeOfError) {
